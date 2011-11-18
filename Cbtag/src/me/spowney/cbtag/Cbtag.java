@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,6 +20,8 @@ public class Cbtag extends JavaPlugin{
 	//hashmaps
 	public Map<Player, Player> tagged = new HashMap<Player, Player>();
 	public Map<Player, Integer> tagid = new HashMap<Player, Integer>();
+	public Map<Player, Boolean> punish = new HashMap<Player, Boolean>();
+	public Map<Player, Boolean> warn = new HashMap<Player, Boolean>();
 	
 	//listeners
 	private final CbtagEntityListener entityListener = new CbtagEntityListener(this);
@@ -37,8 +41,8 @@ public class Cbtag extends JavaPlugin{
 		plman.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
 		
 		//ReadConfigs
-		taggedtime = getConfig().getLong("taggedtime");
-		respawntime = getConfig().getLong("respawntime");
+	//	taggedtime = getConfig().getLong("taggedtime");
+	//	respawntime = getConfig().getLong("respawntime");
 		
 		
 		l.info(prefix + "CombatTag Enabled.");
@@ -52,15 +56,30 @@ public class Cbtag extends JavaPlugin{
 		l.info(prefix + "CombatTag Disabled.");
 	}
 	
-	public void delayedQuitAction(Player p, final Player p1)
+	public void delayedQuitAction(final Player p, final Player p1)
 	{
 		s.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 
 		    public void run() {
 		    	if(!p.isOnline())
 		    	{
-		    		s.broadcastMessage(p.getDisplayName() + " was assasinated for combat logging");
+		    		s.broadcastMessage(ChatColor.RED + prefix + ChatColor.GOLD + p.getDisplayName() + ChatColor.GREEN + "was bitch slapped to death by Fuzzy_bot for combat logging");
+		    		punish.put(p, true);
 		    		
+		    		//get players inventory and give it all to player p1.
+		    		for(ItemStack is : p.getInventory().getContents())
+		    		{
+		    			if(is != null)
+		    			{
+		    			p1.getLocation().getWorld().dropItemNaturally(p1.getLocation(), is);
+		    			}
+		    		}
+		    		
+		    		
+		    	}
+		    	else
+		    	{
+		    		//disable player for approx 5 seconds
 		    	}
 		    }
 		}, respawntime);
@@ -80,8 +99,31 @@ public class Cbtag extends JavaPlugin{
 		}, taggedtime);
 	}
 	
+	public void tagPlayer(Player p, Player p1)
+	{
+		
+		if(tagid.containsKey(p))
+		{
+		tagid.put(p, tagid.get(p) + 1);
+		id = tagid.get(p);
+		}
+		else
+		{
+			id = 0;
+			tagid.put(p, id);
+		}
+		if(tagged.get(p) != p1)
+		{		
+		p.sendMessage(prefix + "You were tagged by " + p1.getDisplayName());
+		p1.sendMessage(prefix + "You tagged " + p.getDisplayName());
+		}
+		tagged.put(p, p1);
+		delayedTagRemove(p, id);
+	}
+	
 	Logger l = Logger.getLogger("Minecraft");
-	Server s = getServer();
-	long taggedtime;
-	long respawntime;
+	Server s = Bukkit.getServer();
+	long taggedtime = 300;
+	long respawntime = 200;
+	int id;
 }
