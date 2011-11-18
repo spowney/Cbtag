@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Cbtag extends JavaPlugin{
 	
-	public String prefix = ChatColor.RED + "[Cbtag] " + ChatColor.WHITE;
+	public String prefix = "[Cbtag] ";
 	
 	//hashmaps
 	public Map<Player, Player> tagged = new HashMap<Player, Player>();
@@ -63,7 +63,7 @@ public class Cbtag extends JavaPlugin{
 		    public void run() {
 		    	if(!p.isOnline())
 		    	{
-		    		s.broadcastMessage(ChatColor.RED + prefix + ChatColor.GOLD + p.getDisplayName() + ChatColor.GREEN + "was bitch slapped to death by Fuzzy_bot for combat logging");
+		    		s.broadcastMessage(ChatColor.RED + prefix + ChatColor.GOLD + p.getDisplayName() + ChatColor.GREEN + " was bitch slapped to death by Fuzzy_bot for combat logging");
 		    		punish.put(p, true);
 		    		
 		    		//get players inventory and give it all to player p1.
@@ -74,6 +74,8 @@ public class Cbtag extends JavaPlugin{
 		    			p1.getLocation().getWorld().dropItemNaturally(p1.getLocation(), is);
 		    			}
 		    		}
+		    		
+		    		
 		    		
 		    		
 		    	}
@@ -114,8 +116,8 @@ public class Cbtag extends JavaPlugin{
 		}
 		if(tagged.get(p) != p1)
 		{		
-		p.sendMessage(prefix + "You were tagged by " + p1.getDisplayName());
-		p1.sendMessage(prefix + "You tagged " + p.getDisplayName());
+		p.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You were tagged by " + p1.getDisplayName());
+		p1.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You tagged " + p.getDisplayName());
 		}
 		tagged.put(p, p1);
 		delayedTagRemove(p, id);
