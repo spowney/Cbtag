@@ -29,11 +29,21 @@ public class CbtagEntityListener extends EntityListener{
 				{
 					Player p1 = (Player) e1.getDamager();
 					plugin.tagged.put(p, p1);
+					if(plugin.tagid.containsKey(p))
+					{
+					plugin.tagid.put(p, plugin.tagid.get(p) + 1);
+					id = plugin.tagid.get(p);
+					}
+					else
+					{
+						id = 0;
+						plugin.tagid.put(p, id);
+					}
 					
 					p.sendMessage(plugin.prefix + "You were tagged by " + p1.getDisplayName());
 					p1.sendMessage(plugin.prefix + "You tagged " + p.getDisplayName());
 					
-					plugin.delayedTagRemove(p);
+					plugin.delayedTagRemove(p, id);
 				}
 				else if(e1.getDamager() instanceof Projectile) //Player damaged by Arrow
 				{
@@ -42,11 +52,21 @@ public class CbtagEntityListener extends EntityListener{
 					{
 						Player p1 = (Player) pr.getShooter();
 						plugin.tagged.put(p, p1);
+						if(plugin.tagid.containsKey(p))
+						{
+						plugin.tagid.put(p, plugin.tagid.get(p) + 1);
+						id = plugin.tagid.get(p);
+						}
+						else
+						{
+							id = 0;
+							plugin.tagid.put(p, id);
+						}
 						
 						p.sendMessage(plugin.prefix + "You were tagged by " + p1.getDisplayName());
 						p1.sendMessage(plugin.prefix + "You tagged " + p.getDisplayName());
 						
-						plugin.delayedTagRemove(p);
+						plugin.delayedTagRemove(p, id);
 					}
 				}
 			}
@@ -61,7 +81,10 @@ public class CbtagEntityListener extends EntityListener{
 			Player p = (Player) e.getEntity();
 			
 			plugin.tagged.remove(p);  //remove player from tagged map
+			
+			//clear drops of players that are assisinated when they log in
 		}
 	}
 	
+	int id;
 }

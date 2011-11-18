@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -18,6 +17,7 @@ public class Cbtag extends JavaPlugin{
 	
 	//hashmaps
 	public Map<Player, Player> tagged = new HashMap<Player, Player>();
+	public Map<Player, Integer> tagid = new HashMap<Player, Integer>();
 	
 	//listeners
 	private final CbtagEntityListener entityListener = new CbtagEntityListener(this);
@@ -34,7 +34,11 @@ public class Cbtag extends JavaPlugin{
 		
 		plman.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
 		plman.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
+		plman.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
 		
+		//ReadConfigs
+		taggedtime = getConfig().getLong("taggedtime");
+		respawntime = getConfig().getLong("respawntime");
 		
 		
 		l.info(prefix + "CombatTag Enabled.");
@@ -48,16 +52,36 @@ public class Cbtag extends JavaPlugin{
 		l.info(prefix + "CombatTag Disabled.");
 	}
 	
-	public void delayedQuitAction(Player p, Player p1)
+	public void delayedQuitAction(Player p, final Player p1)
 	{
-		
+		s.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+
+		    public void run() {
+		    	if(!p.isOnline())
+		    	{
+		    		s.broadcastMessage(p.getDisplayName() + " was assasinated for combat logging");
+		    		
+		    	}
+		    }
+		}, respawntime);
 	}
 	
-	public void delayedTagRemove(Player p)
+	public void delayedTagRemove(final Player p, final int id) //
 	{
 		
+		s.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+
+		    public void run() {
+		    	if(id == tagid.get(p))
+		    	{
+		        tagged.remove(p);
+		    	}
+		    }
+		}, taggedtime);
 	}
 	
 	Logger l = Logger.getLogger("Minecraft");
 	Server s = getServer();
+	long taggedtime;
+	long respawntime;
 }
