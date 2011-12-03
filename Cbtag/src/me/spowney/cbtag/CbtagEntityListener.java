@@ -65,7 +65,7 @@ public class CbtagEntityListener extends EntityListener{
 			
 			if(plugin.punish.containsKey(p.getDisplayName()))
 			{
-				plugin.punish.remove(p.getDisplayName());
+				plugin.punish.put(p.getDisplayName(), false);
 				e.getDrops().clear();
 				
 			}

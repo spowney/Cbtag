@@ -47,7 +47,7 @@ public class Cbtag extends JavaPlugin{
 	//	taggedtime = getConfig().getLong("taggedtime");
 	//	respawntime = getConfig().getLong("respawntime");
 		
-		//buffered read here
+		//buffered read of hashmap
 		//try {
     		
 			//BufferedReader reader = new BufferedReader(new FileReader("combatloggers.txt"));
@@ -67,7 +67,7 @@ public class Cbtag extends JavaPlugin{
 		//}
 		
 		
-		l.info(prefix + "CombatTag Enabled.");
+		l.info(prefix + "CombatTag v 1.0 Enabled.");
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class Cbtag extends JavaPlugin{
 		
 		//persistance and cleanup
 		
-		l.info(prefix + "CombatTag Disabled.");
+		l.info(prefix + "CombatTag v 1.0 Disabled.");
 	}
 	
 	public void delayedQuitAction(final Player p, final Player p1)
@@ -85,10 +85,12 @@ public class Cbtag extends JavaPlugin{
 		    public void run() {
 		    	if(!p.isOnline())
 		    	{
-		    		s.broadcastMessage(ChatColor.RED + prefix + ChatColor.GOLD + p.getDisplayName() + ChatColor.GREEN + " was bitch slapped to death by Fuzzy_bot for combat logging");
+		    		s.broadcastMessage(ChatColor.RED + prefix + ChatColor.GOLD + p.getDisplayName() + ChatColor.GREEN + " was cock slapped to death by fuzzy_bot for combat logging");
 		    		punish.put(p.getDisplayName(), true);
 		    		
-		    		//buffered write here
+		    		//write hashmap to file
+		    		
+		    		
 		    		
 		    		//get players inventory and give it all to player p1.
 		    		for(ItemStack is : p.getInventory().getContents())
@@ -142,6 +144,10 @@ public class Cbtag extends JavaPlugin{
 			{		
 			p.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You were tagged by " + p1.getDisplayName());
 			p1.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You tagged " + p.getDisplayName());
+			if(!tagged.containsKey(p))
+			{
+				p.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "If you leave the game within 10 seconds of being hit,  you will be cock slapped to death!");
+			}
 			}
 			tagged.put(p, p1);
 			delayedTagRemove(p, id);

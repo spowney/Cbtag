@@ -20,12 +20,14 @@ public class CbtagPlayerListener extends PlayerListener{
 		
 		//assasinate players who log in from combat logging.
 		
-		if(plugin.punish.containsKey(p.getDisplayName()))
+		if(plugin.punish.containsKey(p.getDisplayName()) && plugin.punish.get(p.getDisplayName()))
 		{
 			p.getInventory().clear(); //avoids duplicate items
 			p.setHealth(0); //can kill player a more efficient way? p.damage(20)?
-			p.sendMessage(ChatColor.RED + plugin.prefix + ChatColor.GREEN + "Fuzzy_bot bitch slapped you to death for combat logging");
-			plugin.punish.remove(p.getDisplayName());
+			p.sendMessage(ChatColor.RED + plugin.prefix + ChatColor.GREEN + "Fuzzy_bot cock slapped you to death for combat logging");
+			plugin.punish.put(p.getDisplayName(), false);
+			
+			//write hashmap to file
 		}
 	}
 	
