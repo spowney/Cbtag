@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
 public class Cbtag extends JavaPlugin{
 	
 	public String prefix = "[Cbtag] ";
@@ -34,9 +35,7 @@ public class Cbtag extends JavaPlugin{
 		PluginManager plman = s.getPluginManager();
 				
 		//Register Listeners
-		plman.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
-		
-		plman.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
+		plman.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Monitor, this);
 		plman.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
 		plman.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this);
 		
@@ -104,24 +103,25 @@ public class Cbtag extends JavaPlugin{
 	public void tagPlayer(Player p, Player p1)
 	{
 		
-		if(tagid.containsKey(p))
-		{
-		tagid.put(p, tagid.get(p) + 1);
-		id = tagid.get(p);
+			if(tagid.containsKey(p))
+			{
+			tagid.put(p, tagid.get(p) + 1);
+			id = tagid.get(p);
+			}
+			else
+			{
+				id = 0;
+				tagid.put(p, id);
+			}
+			if(tagged.get(p) != p1)
+			{		
+			p.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You were tagged by " + p1.getDisplayName());
+			p1.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You tagged " + p.getDisplayName());
+			}
+			tagged.put(p, p1);
+			delayedTagRemove(p, id);
 		}
-		else
-		{
-			id = 0;
-			tagid.put(p, id);
-		}
-		if(tagged.get(p) != p1)
-		{		
-		p.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You were tagged by " + p1.getDisplayName());
-		p1.sendMessage(ChatColor.RED + prefix + ChatColor.WHITE + "You tagged " + p.getDisplayName());
-		}
-		tagged.put(p, p1);
-		delayedTagRemove(p, id);
-	}
+	
 	
 	Logger l = Logger.getLogger("Minecraft");
 	Server s = Bukkit.getServer();

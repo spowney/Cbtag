@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
 
+
 public class CbtagEntityListener extends EntityListener{
 
 	public static Cbtag plugin;
@@ -17,17 +18,22 @@ public class CbtagEntityListener extends EntityListener{
 	
 	public void onEntityDamage(EntityDamageEvent e)
 	{
+		if (e.isCancelled()){//Check if the damage event is canceled
+			return;
+		}
+		
 		if(e instanceof EntityDamageByEntityEvent)
 		{
 			EntityDamageByEntityEvent e1 = (EntityDamageByEntityEvent) e;
 			
 			if(e.getEntity() instanceof Player)
 			{
-				Player p = (Player) e.getEntity();
+				Player p = (Player) e.getEntity();				
 				
 				if(e1.getDamager() instanceof Player) //Player damaged by other player
 				{
 					Player p1 = (Player) e1.getDamager();
+					
 					plugin.tagPlayer(p, p1);
 					
 				}
@@ -42,7 +48,8 @@ public class CbtagEntityListener extends EntityListener{
 
 					}
 				}
-			}
+				
+			}	
 		}
 		
 	}
