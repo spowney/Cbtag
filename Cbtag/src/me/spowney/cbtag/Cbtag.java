@@ -1,5 +1,9 @@
 package me.spowney.cbtag;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -21,7 +25,7 @@ public class Cbtag extends JavaPlugin{
 	//hashmaps
 	public Map<Player, Player> tagged = new HashMap<Player, Player>();
 	public Map<Player, Integer> tagid = new HashMap<Player, Integer>();
-	public Map<Player, Boolean> punish = new HashMap<Player, Boolean>();
+	public Map<String, Boolean> punish = new HashMap<String, Boolean>();
 	public Map<Player, Boolean> warn = new HashMap<Player, Boolean>();
 	
 	//listeners
@@ -43,6 +47,25 @@ public class Cbtag extends JavaPlugin{
 	//	taggedtime = getConfig().getLong("taggedtime");
 	//	respawntime = getConfig().getLong("respawntime");
 		
+		//buffered read here
+		//try {
+    		
+			//BufferedReader reader = new BufferedReader(new FileReader("combatloggers.txt"));
+		///	 String line = null;
+			 
+	       //     while ((line = reader.readLine()) != null) {
+	         //   	punish.put(line, true);
+	         //   }
+			
+			
+		//} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//} catch (IOException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+		
 		
 		l.info(prefix + "CombatTag Enabled.");
 	}
@@ -63,7 +86,9 @@ public class Cbtag extends JavaPlugin{
 		    	if(!p.isOnline())
 		    	{
 		    		s.broadcastMessage(ChatColor.RED + prefix + ChatColor.GOLD + p.getDisplayName() + ChatColor.GREEN + " was bitch slapped to death by Fuzzy_bot for combat logging");
-		    		punish.put(p, true);
+		    		punish.put(p.getDisplayName(), true);
+		    		
+		    		//buffered write here
 		    		
 		    		//get players inventory and give it all to player p1.
 		    		for(ItemStack is : p.getInventory().getContents())

@@ -63,9 +63,9 @@ public class CbtagEntityListener extends EntityListener{
 			plugin.tagged.remove(p);  //remove player from tagged map
 			
 			
-			if(plugin.punish.containsKey(p))
+			if(plugin.punish.containsKey(p.getDisplayName()))
 			{
-				plugin.punish.remove(p);
+				plugin.punish.remove(p.getDisplayName());
 				e.getDrops().clear();
 				
 			}
